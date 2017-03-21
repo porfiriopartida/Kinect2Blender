@@ -26,16 +26,21 @@ namespace HelloKinect
 
         private void btnStartKinect(object sender, EventArgs e)
         {
-            btnStartKinectAsync();
+            int port = int.Parse(this.serverPortTextBox.Text);
+            string address = this.serverAddressTextBox.Text;
+            this.serverPortTextBox.Enabled = false;
+
+            btnStartKinectAsync(address, port);
         }
 
-        private async void btnStartKinectAsync()
+        private async void btnStartKinectAsync(string address, int port)
         {
-            await System.Threading.Tasks.Task.Run(() => btnStartKinectTask());
+            await System.Threading.Tasks.Task.Run(() => btnStartKinectTask(address, port));
         }
-        private async Task btnStartKinectTask()
+        private async Task btnStartKinectTask(string address, int port)
         {
-            KinectAPI.startKinect();
+            KinectAPI.startKinect(address, port);
+
             KinectAPI.debugger.txtDebugger = txtSkeletonData;
             string skeletonData = KinectAPI.getSkeletonData();
         }

@@ -32,7 +32,11 @@
             this.btnSkeleton = new System.Windows.Forms.Button();
             this.txtSkeletonData = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.serverAddressTextBox = new System.Windows.Forms.TextBox();
+            this.serverPortTextBox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelHello
@@ -57,7 +61,7 @@
             // 
             this.txtSkeletonData.CausesValidation = false;
             this.txtSkeletonData.HideSelection = false;
-            this.txtSkeletonData.Location = new System.Drawing.Point(135, 3);
+            this.txtSkeletonData.Location = new System.Drawing.Point(145, 3);
             this.txtSkeletonData.Multiline = true;
             this.txtSkeletonData.Name = "txtSkeletonData";
             this.txtSkeletonData.ReadOnly = true;
@@ -68,12 +72,39 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.btnSkeleton);
+            this.flowLayoutPanel1.Controls.Add(this.flowLayoutPanel2);
             this.flowLayoutPanel1.Controls.Add(this.txtSkeletonData);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(826, 598);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(829, 598);
             this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.btnSkeleton);
+            this.flowLayoutPanel2.Controls.Add(this.serverAddressTextBox);
+            this.flowLayoutPanel2.Controls.Add(this.serverPortTextBox);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(136, 100);
+            this.flowLayoutPanel2.TabIndex = 6;
+            // 
+            // serverAddressTextBox
+            // 
+            this.serverAddressTextBox.Location = new System.Drawing.Point(3, 32);
+            this.serverAddressTextBox.Name = "serverAddressTextBox";
+            this.serverAddressTextBox.ReadOnly = true;
+            this.serverAddressTextBox.Size = new System.Drawing.Size(126, 20);
+            this.serverAddressTextBox.TabIndex = 5;
+            this.serverAddressTextBox.Text = "localhost";
+            // 
+            // serverPortTextBox
+            // 
+            this.serverPortTextBox.Location = new System.Drawing.Point(3, 58);
+            this.serverPortTextBox.Name = "serverPortTextBox";
+            this.serverPortTextBox.Size = new System.Drawing.Size(126, 20);
+            this.serverPortTextBox.TabIndex = 6;
+            this.serverPortTextBox.Text = "8907";
             // 
             // MainForm
             // 
@@ -87,6 +118,8 @@
             this.Text = "Informal Kinect Test";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -97,6 +130,9 @@
         private System.Windows.Forms.Button btnSkeleton;
         private System.Windows.Forms.TextBox txtSkeletonData;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.TextBox serverAddressTextBox;
+        private System.Windows.Forms.TextBox serverPortTextBox;
     }
 }
 

@@ -17,7 +17,7 @@ namespace HelloKinect
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             MainForm mainForm = new MainForm();
-            //mainForm.HelloKinect = new HelloKinect();
+           // mainForm.HelloKinect = new HelloKinect();
             Application.Run(mainForm);
             // Application.Run(new ThreadForm());
         }

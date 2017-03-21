@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading;
 using System.Windows.Media;
 using System.Windows;
+using System.Net.Sockets;
+using System.Text;
 
 namespace HelloKinect
 {
@@ -57,8 +59,59 @@ namespace HelloKinect
 
             return drawingVisual;
         }
-        public void startKinect()
+        string address;
+        int port;
+        private void sendTcpMessage(string str) {
+            try
+            {
+                if (tcpclnt == null)
+                {
+                    return;
+                }
+
+                ASCIIEncoding asen = new ASCIIEncoding();
+                Stream stm = tcpclnt.GetStream();
+
+                byte[] ba = asen.GetBytes(str);
+                stm.Write(ba, 0, ba.Length);
+            }
+            catch (Exception e)
+            {
+                if (tcpclnt != null)
+                {
+                    tcpclnt.Close();
+                }
+
+                Console.WriteLine("Error..... " + e.StackTrace);
+            }
+
+        }
+        TcpClient tcpclnt;
+        private void initClient() {
+            try
+            {
+                tcpclnt = new TcpClient();
+                Console.WriteLine("Connecting.....");
+                tcpclnt.Connect(address, port);
+            }
+            catch (Exception e)
+            {
+                if (tcpclnt != null)
+                {
+                    tcpclnt.Close();
+                    tcpclnt = null;
+                }
+                Console.WriteLine("Error..... " + e.StackTrace);
+            }
+
+        }
+        public void startKinect(string address, int port)
         {
+            this.address = address;
+            this.port = port;
+
+            initClient();
+
             CreateDrawingVisualRectangle();
             //this.drawingGroup = new DrawingGroup();
             //this.dc = this.drawingGroup.Open();
@@ -66,6 +119,7 @@ namespace HelloKinect
             {
                 return;
             }
+
             foreach (var potentialSensor in KinectSensor.KinectSensors)
             {
                 if (potentialSensor.Status == KinectStatus.Connected)
@@ -100,6 +154,7 @@ namespace HelloKinect
             {
                 this.sensor = null;
             }
+
             if (null == this.sensor)
             {
                 debugger.WriteLine("Kinect failed to start...");
@@ -107,7 +162,6 @@ namespace HelloKinect
             else
             {
                 debugger.WriteLine("Kinect started...");
-
             }
         }
         private void EnableNearModeSkeletalTracking()
@@ -150,7 +204,7 @@ namespace HelloKinect
         private async Task resetCanDraw()
         {
             canDraw = false;
-            int milliseconds = 2000;
+            int milliseconds = 100;
             Thread.Sleep(milliseconds);
             canDraw = true;
         }
@@ -163,18 +217,22 @@ namespace HelloKinect
                 if (skeleton != null && skeleton.TrackingState != SkeletonTrackingState.NotTracked)
                 {
                  //   debugger.WriteLine("\n\r Skeleton: " + (skeleton.TrackingId));
-                    debugger.WriteLine("\n\r - - Position: (" + (skeleton.Position.X + ", " + skeleton.Position.Y + ", " + skeleton.Position.Z) + ") ");
+                    //debugger.WriteLine("\n\r - - Position: (" + (skeleton.Position.X + ", " + skeleton.Position.Y + ", " + skeleton.Position.Z) + " ");
                     JointCollection jointCollection = skeleton.Joints;
                     BoneOrientationCollection boneOrientationCollection = skeleton.BoneOrientations;
                     foreach (Joint joint in jointCollection)
                     {
                         if (joint.TrackingState != JointTrackingState.NotTracked)
                         {
-                            debugger.WriteLine("\n\r - - - Joint (" + joint.JointType.ToString() + ") Position: (" + (joint.Position.X + ", " + joint.Position.Y + ", " + joint.Position.Z) + ") ");
+                            //Blender plugin accepted format
+                            //jointName x y z 
+                            string tcpMessage = joint.JointType.ToString() + " " + (joint.Position.X + " " + joint.Position.Y + " " + joint.Position.Z + " \n");
+                            debugger.WriteLine("\n\r" + tcpMessage  + " ");
+                            sendTcpMessage(tcpMessage);
                         }
                     }
                     
-
+                    /*
                     if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
                     {
                         DrawTrackedSkeletonJoints(skeleton.Joints);
@@ -183,7 +241,7 @@ namespace HelloKinect
                     {
                         DrawSkeletonPosition(skeleton.Position);
                     }
-
+                    */
                     /*
                     foreach (BoneOrientation boneOrientation in boneOrientationCollection)
                     {
@@ -192,7 +250,8 @@ namespace HelloKinect
                         debugger.WriteLine("\n\r - - - Bone (" + boneOrientation.StartJoint + " -> " + boneOrientation.EndJoint + ") Rotation: (" + (rotation.X + ", " + rotation.Y + ", " + rotation.Z + ", " + rotation.W) + ") ");
                     }
                     */
-                    debugger.WriteLine("\n\r\n\r==================\n\r\n\r");
+
+                    //debugger.WriteLine("\n\r\n\r==================\n\r\n\r");
                 }
             }
         }
